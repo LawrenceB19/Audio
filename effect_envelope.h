@@ -75,6 +75,7 @@ public:
 		if (release_count == 0) release_count = 1;
 	}
 	bool isActive();
+	bool isRelease();
 	bool isSustain();
 	virtual void update(void);
 private:

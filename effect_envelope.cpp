@@ -187,6 +187,13 @@ bool AudioEffectEnvelope::isActive()
 	return true;
 }
 
+bool AudioEffectEnvelope::isRelease()
+{
+	uint8_t current_state = *(volatile uint8_t *)&state;
+	if (current_state == STATE_RELEASE) return true;
+	return false;
+}
+
 bool AudioEffectEnvelope::isSustain()
 {
 	uint8_t current_state = *(volatile uint8_t *)&state;
