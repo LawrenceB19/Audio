@@ -45,6 +45,12 @@ void AudioSynthWaveform::update(void)
 	uint32_t i, ph, index, index2, scale;
 	const uint32_t inc = phase_increment;
 
+	if(syncFlag==1){
+		phase_accumulator = 0;
+		syncFlag = 0;
+	}
+	//sync
+
 	ph = phase_accumulator + phase_offset;
 	if (magnitude == 0) {
 		phase_accumulator += inc * AUDIO_BLOCK_SAMPLES;
