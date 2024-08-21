@@ -35,6 +35,8 @@ class AudioEffectWaveshaper : public AudioStream
     ~AudioEffectWaveshaper();
     virtual void update(void);
     void shape(float* waveshape, int length);
+    void enable(bool en);//true = on, false = bypass
+    bool enabled = false;
   private:
     audio_block_t *inputQueueArray[1];
     int16_t* waveshape;

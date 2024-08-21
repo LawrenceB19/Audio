@@ -53,6 +53,9 @@ void AudioEffectWaveshaper::shape(float* waveshape, int length)
   while (index >>= 1) --lerpshift;
 }
 
+void AudioEffectWaveshaper::enable(bool en){
+  enabled = en;
+}
 void AudioEffectWaveshaper::update(void)
 {
   if(!waveshape) return;
@@ -60,18 +63,20 @@ void AudioEffectWaveshaper::update(void)
   audio_block_t *block;
   block = receiveWritable();
   if (!block) return;
-
-  uint16_t x, xa;
-  int16_t i, ya, yb;
-  for (i = 0; i < AUDIO_BLOCK_SAMPLES; i++) {
-    // bring int16_t data into uint16_t range
-    x = block->data[i] + 32768;
-    // lerp waveshape (from http://coranac.com/tonc/text/fixed.htm)
-    xa = x >> lerpshift;
-    ya = waveshape[xa];
-    yb = waveshape[xa + 1];
-    block->data[i] = ya + ((yb - ya) * (x - (xa << lerpshift)) >> lerpshift);
+  if(enabled == true){
+    uint16_t x, xa;
+    int16_t i, ya, yb;
+    for (i = 0; i < AUDIO_BLOCK_SAMPLES; i++) {
+      // bring int16_t data into uint16_t range
+      x = block->data[i] + 32768;
+      // lerp waveshape (from http://coranac.com/tonc/text/fixed.htm)
+      xa = x >> lerpshift;
+      ya = waveshape[xa];
+      yb = waveshape[xa + 1];
+      block->data[i] = ya + ((yb - ya) * (x - (xa << lerpshift)) >> lerpshift);
+    }
   }
+
 
   transmit(block);
   release(block);
